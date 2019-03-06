@@ -1,0 +1,62 @@
+version: '3.3'
+services:
+  mysql:
+    build: ./docker/mysql
+    volumes:
+      - mysqldata:/var/lib/mysql
+      - mysqlsock:/var/run/mysqld
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=adapp
+  nginx:
+    build: ./docker/nginx
+    volumes:
+        - datastore:/share
+        - ./docker/nginx/log:/var/log/nginx
+    ports:
+      - 80:80
+    links:
+      - rails
+  rails:
+    container_name: modern_rails
+    build: ./docker/rails
+    volumes:
+        - ./app:/var/www/html
+        - datastore:/share
+        - mysqlsock:/var/run/mysqld
+    ports:
+      - 8000:8000
+    links:
+      - mysql
+    #   - s3
+  node:
+    container_name: modern_node
+    build: ./docker/node
+    ports:
+      - 3000:3000
+    volumes:
+      - ./node:/home/node
+      # - ./app/app/assets/javascripts/:/home/node/dis/
+    tty: true
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=mysql
+      - PMA_USER=root
+      - PMA_PASSWORD=password
+    links:
+      - mysql
+    ports:
+       - 8888:80
+  smtp:
+    image: phpdockerio/mailhog:latest
+    ports:
+      - 1025:1025
+      - 8025:8025
+volumes:
+  datastore:
+  mysqldata:
+  mysqlsock:

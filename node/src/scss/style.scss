@@ -1,0 +1,15 @@
+@import '../../node_modules/bulma/sass/utilities/_all.sass';
+/* set variables     */
+
+/* set variables end */
+
+/* リセットしないとグリッドが崩れる */
+@import '../../node_modules/bulma/sass/base/minireset.sass';
+/* グリッド */
+@import '../../node_modules/bulma/sass/grid/columns.sass';
+/* コンテナの定義 */
+@import '../../node_modules/bulma/sass/elements/container.sass';
+/* `is-hidden-mobile` などの便利クラス */
+@import '../../node_modules/bulma/sass/base/helpers.sass';
+/* ハンバーガーメニューなど */
+@import '../../node_modules/bulma/sass/components/navbar.sass';
